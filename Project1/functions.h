@@ -213,9 +213,21 @@ void markTaskCompleted(vector<ToDo>& todolist, string file_todo) {
 
 void loadtasksFile(vector<ToDo>& todolist, string file_todo) {
     ifstream inFile(file_todo);
-    // проверка успешного открытия файла
     if (!inFile.is_open()) {
         cout << "Файл " << file_todo << " не найден. Будет создан новый при сохранении.\n";
         return;
     }
+
+    todolist.clear(); // Очищаем текущий список
+    ToDo task;
+    string status;
+    while (getline(inFile, task.name) &&
+        getline(inFile, task.date) &&
+        getline(inFile, task.description) &&
+        getline(inFile, status)) {
+        task.is_complete = (status == "1");
+        todolist.push_back(task);
+    }
+    inFile.close();
+    cout << "Задачи успешно загружены из файла!\n";
 }
